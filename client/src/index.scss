@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(55, 57, 66);
+  color: white;
+}
+
+.container {
+  height: 100vh;
+  width: calc(100% - 40px);
+  max-width: 400px;
+  margin: 0 auto;
+
+  h2,h3,h4 {
+    text-align: center;
+  }
+
+  .primary-btn {
+    width: 100%;
+    margin-top: 25px;
+    color: white;
+    background-color: rgb(142, 181, 13);
+
+    &.bottom {
+      position: absolute;
+      bottom: 10px;
+      width: calc(100% - 40px);
+    }
+  }
+}

@@ -51,6 +51,17 @@ const players = [
     acceptMarketing: true,
     acceptTerms: true,
     showWelcomeScreen: true
+  },{
+    id: 10,
+    username: "asd",
+    password: "asd",
+    showEmailPhoneScreen: false,
+    email: "asd@asd.com",
+    phone: "11-11",
+    showTermsAndCondition: false,
+    acceptMarketing: true,
+    acceptTerms: true,
+    showWelcomeScreen: true
   }
 ];
 
