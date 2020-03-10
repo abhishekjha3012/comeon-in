@@ -7,15 +7,15 @@ body {
   color: white;
 }
 
+h2,h3,h4 {
+  text-align: center;
+}
+
 .container {
   height: 100vh;
   width: calc(100% - 40px);
   max-width: 400px;
   margin: 0 auto;
-
-  h2,h3,h4 {
-    text-align: center;
-  }
 
   .primary-btn {
     width: 100%;

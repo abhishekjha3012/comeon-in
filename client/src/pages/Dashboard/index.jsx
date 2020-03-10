@@ -5,9 +5,14 @@ import Header from '../../components/Header/Header'
 import { ReactComponent as WelcomeLogo } from '../../assets/welcome.svg'
 
 const useStyles = makeStyles(theme => ({
-    root:{
+    root: {
         textAlign: 'center',
         marginTop: '50px'
+    },
+    greetMsg: {
+        marginTop: '-15px',
+        textAlign: 'center',
+        fontSize: '14px',
     },
     svgBox: {
         textAlign: 'center',
@@ -15,6 +20,10 @@ const useStyles = makeStyles(theme => ({
         height: '100px',
         margin: '0 auto'
     },
+    balance: {
+        fontWeight: '900',
+        marginTop: '-15px'
+    }
 }));
 
 export default function Dashboard() {
@@ -33,17 +42,17 @@ export default function Dashboard() {
 
                 <Header />
 
-                <h3>Hello, Welcome Back.</h3>
-
                 <div className={classes.svgBox}>
                     <WelcomeLogo width='80%' height='100px' />
                 </div>
 
-                <p>Its nice to see you again.</p>
+                <h3>Hello, Welcome Back.</h3>
+
+                <p className={classes.greetMsg}> Its nice to see you again.</p>
 
                 <div className={classes.root}>
                     <p>Your current balance is</p>
-                    <h4>100 Kr</h4>
+                    <p className={classes.balance}>100 Kr</p>
                 </div>
 
             </div>

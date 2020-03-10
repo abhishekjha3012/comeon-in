@@ -81,6 +81,7 @@ export default function Login() {
                     if (response.status.toLowerCase() === 'success') {
                         localStorage.setItem('username', username);
                         localStorage.setItem('password', password);
+                        localStorage.setItem('userid', response.response.id );
                         if (response.response.showEmailPhoneScreen) {
                             history.push("/userInformation", { id: response.response.id });
                         } else if (response.response.showTermsAndCondition) {
@@ -119,7 +120,7 @@ export default function Login() {
                         className: classes.input
                     }}
                     label="Username"
-                    onChange={handleUsernameChange}
+                    onBlur={handleUsernameChange}
                 />
                 <TextField
                     variant="filled"
@@ -130,8 +131,9 @@ export default function Login() {
                     }}
                     label="Password"
                     type="password"
-                    onChange={handlePasswordChange}
+                    onBlur={handlePasswordChange}
                 />
+                
                 {showError && <p className={classes.errorMsg}>
                     {errorMsg}
                 </p>

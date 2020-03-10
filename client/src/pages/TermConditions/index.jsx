@@ -16,7 +16,10 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center',
         width: '100px',
         margin: '0 auto'
-     }
+    },
+    tncHeader: {
+        textAlign: 'left',
+    }
 }));
 
 export default function TermConditions() {
@@ -52,7 +55,17 @@ export default function TermConditions() {
                     enim eu lobortis. Nulla facilisi. Donec dictum nibh eu nisl efficitur posuere. Duis sit amet rhoncus
                     ex. Vivamus eu lectus metus. Duis id blandit enim, ut luctus lacus. In in elementum augue.</p>
 
-                    <h4>Casino Requirements</h4>
+                    <h4 className={classes.tncHeader}>Casino Requirements</h4>
+
+                    <p>Curabitur aliquet convallis lectus quis rutrum. Pellentesque ac tempus turpis. Nulla nec pharetra lectus,
+                    get aliquet tortor. Donec dapibus et nibh nec accumsan. Cras euismod sollicitudin libero, ac consectetur
+                    felis feugiat ac. Suspendisse pulvinar consectetur pulvinar. Quisque sollicitudin rhoncus risus, ut
+                    sollicitudin nibh congue in. Quisque a dignissim elit. Proin eget erat metus. Donec aliquet hendrerit
+                    arcu, ut sollicitudin lorem laoreet quis. Maecenas id justo eu elit lacinia interdum. Integer eget tempus
+                    ante. Nunc laoreet turpis quis nibh bibendum, ut finibus mi ultricies. Pellentesque vulputate nunc etiaculis commodo.
+                    Sed accumsan nibh sagittis, laoreet purus vel, convallis enim.</p>
+
+                    <h4 className={classes.tncHeader}>Curabitur Aliquet</h4>
 
                     <p>Curabitur aliquet convallis lectus quis rutrum. Pellentesque ac tempus turpis. Nulla nec pharetra lectus,
                     get aliquet tortor. Donec dapibus et nibh nec accumsan. Cras euismod sollicitudin libero, ac consectetur
