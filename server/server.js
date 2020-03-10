@@ -153,6 +153,6 @@ server.use((req, res, next) => {
   next();
 });
 
-server.listen(3000, () => {
+server.listen(3001, () => {
   console.log("JSON Server is running");
 });
