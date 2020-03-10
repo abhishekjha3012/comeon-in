@@ -1,7 +1,8 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import { ReactComponent as WelcomeLogo } from '../../assets/welcome.svg'
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import Header from '../../components/Header/Header'
+import { ReactComponent as WelcomeLogo } from '../../assets/welcome.svg'
 
 const useStyles = makeStyles(theme => ({
     root:{
@@ -19,10 +20,18 @@ const useStyles = makeStyles(theme => ({
 export default function Dashboard() {
 
     const classes = useStyles();
+    const history = useHistory();
+    const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
+
+    if(!isAuthenticated){
+        history.push("/login") 
+    }
 
     return (
         <React.Fragment>
             <div className="container dashboard-page">
+
+                <Header />
 
                 <h3>Hello, Welcome Back.</h3>
 
@@ -36,13 +45,6 @@ export default function Dashboard() {
                     <p>Your current balance is</p>
                     <h4>100 Kr</h4>
                 </div>
-
-                <Button
-                    variant="contained"
-                    className="primary-btn bottom"
-                >
-                    Logout
-                </Button>
 
             </div>
         </React.Fragment>

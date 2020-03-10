@@ -22,11 +22,5 @@ body {
     margin-top: 25px;
     color: white;
     background-color: rgb(142, 181, 13);
-
-    &.bottom {
-      position: absolute;
-      bottom: 10px;
-      width: calc(100% - 40px);
-    }
   }
 }

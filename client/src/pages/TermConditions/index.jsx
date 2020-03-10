@@ -1,5 +1,7 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
+import Header from '../../components/Header/Header'
 import { ReactComponent as TNCLogo } from '../../assets/tnc.svg'
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -13,19 +15,25 @@ const useStyles = makeStyles(theme => ({
     svgBox: {
         textAlign: 'center',
         width: '100px',
-        height: '50px',
         margin: '0 auto'
      }
 }));
 
 export default function TermConditions() {
+    
     const classes = useStyles();
+    const history = useHistory();
+    const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
+
+    if(!isAuthenticated){
+        history.push("/login") 
+    }
 
     return (
         <React.Fragment>
             <div className="container term-conditions-page">
 
-                <h2>Logo</h2>
+                <Header/>
 
                 <div className={classes.svgBox}>
                     <TNCLogo width='50%' height='50px' />

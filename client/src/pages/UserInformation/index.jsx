@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -7,6 +7,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { makeStyles } from "@material-ui/core/styles";
 import classNames from 'classnames';
+import Header from '../../components/Header/Header'
 import { ReactComponent as UserLogo } from '../../assets/user.svg'
 import endpoint from '../../endpoint';
 import global from '../../global.scss';
@@ -55,10 +56,16 @@ export default function UserInformation(props) {
 
     const classes = useStyles();
     const location = useLocation();
+    const history = useHistory();
     const [promoChecked, setPromoChecked] = useState(true);
     const [email, setEmail] = useState('');
     const [countryCode, setCountryCode] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
+
+    if(!isAuthenticated){
+        history.push("/login") 
+    }
 
     const handleEmailChange = event => {
         setEmail(event.target.value);
@@ -113,7 +120,7 @@ export default function UserInformation(props) {
         <React.Fragment>
             <div className="container user-info-page">
 
-                <h2>Logo</h2>
+                <Header />
 
                 <div className={classes.svgBox}>
                     <UserLogo width='50%' height='50px' />
