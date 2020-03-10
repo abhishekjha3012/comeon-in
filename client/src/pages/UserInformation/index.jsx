@@ -7,6 +7,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { makeStyles } from "@material-ui/core/styles";
 import classNames from 'classnames';
+import { ReactComponent as UserLogo } from '../../assets/user.svg'
 import endpoint from '../../endpoint';
 import global from '../../global.scss';
 
@@ -41,6 +42,12 @@ const useStyles = makeStyles(theme => ({
             borderBottomColor: global.green,
         }
     },
+    svgBox: {
+        textAlign: 'center',
+        width: '100px',
+        height: '50px',
+        margin: '0 auto'
+    }
 
 }))
 
@@ -107,6 +114,10 @@ export default function UserInformation(props) {
             <div className="container user-info-page">
 
                 <h2>Logo</h2>
+
+                <div className={classes.svgBox}>
+                    <UserLogo width='50%' height='50px' />
+                </div>
 
                 <h3>Share Your Details</h3>
 

@@ -1,14 +1,20 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import TNC from '../../assets/tnc.svg'
+import { ReactComponent as TNCLogo } from '../../assets/tnc.svg'
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
     tncBox: {  
-        maxHeight: '50vh',
+        maxHeight: '25vh',
         overflow: 'scroll',
         padding: '10px 20px',
         border: '1px solid white'
+    },
+    svgBox: {
+        textAlign: 'center',
+        width: '100px',
+        height: '50px',
+        margin: '0 auto'
      }
 }));
 
@@ -21,7 +27,9 @@ export default function TermConditions() {
 
                 <h2>Logo</h2>
 
-                <TNC />
+                <div className={classes.svgBox}>
+                    <TNCLogo width='50%' height='50px' />
+                </div>
 
                 <h3>Terms and Conditions</h3>
 

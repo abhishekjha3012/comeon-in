@@ -3,19 +3,20 @@ import { useHistory } from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from "@material-ui/core/styles";
+import { ReactComponent as LoginLogo } from '../../assets/login.svg'
 import endpoint from '../../endpoint'
 import global from '../../global.scss'
 
 const useStyles = makeStyles(theme => ({
     inputRoot: {
         margin: '10px 0',
-        '& label' : {
+        '& label': {
             color: global.green,
         },
         '& label.Mui-focused': {
             color: global.green,
         },
-        '& .MuiFilledInput-underline:before' : {
+        '& .MuiFilledInput-underline:before': {
             borderBottomColor: global.grey,
         },
         '& .MuiFilledInput-underline:after': {
@@ -24,6 +25,12 @@ const useStyles = makeStyles(theme => ({
     },
     input: {
         color: global.green,
+    },
+    svgBox: {
+        textAlign: 'center',
+        width: '100px',
+        height: '50px',
+        margin: '0 auto'
     },
     errorMsg: {
         color: global.red,
@@ -51,7 +58,7 @@ export default function Login() {
     };
 
     const triggerLogin = () => {
-        if(username && password) {
+        if (username && password) {
             setErrorMsg('');
             setErrorDisplay(false);
             const url = `${endpoint.BASE_URL}${endpoint.AUTHENTICATION}`;
@@ -59,7 +66,7 @@ export default function Login() {
                 username,
                 password
             }
-        
+
             fetch(url, {
                 method: 'POST',
                 mode: 'cors',
@@ -69,26 +76,26 @@ export default function Login() {
                 },
                 body: JSON.stringify(payload)
             })
-            .then(resp => resp.json())
-            .then((response) => {
-                if (response.status.toLowerCase() === 'success') {
-                    localStorage.setItem('username', username);
-                    localStorage.setItem('password', password);
-                    if (response.response.showEmailPhoneScreen) {
-                        history.push("/userInformation", { id: response.response.id });
-                    } else if (response.response.showTermsAndCondition) {
-                        history.push("/termConditions", { id: response.response.id });
-                    } else if (response.response.showWelcomeScreen) {
-                        history.push("/dashboard", { id: response.response.id });
+                .then(resp => resp.json())
+                .then((response) => {
+                    if (response.status.toLowerCase() === 'success') {
+                        localStorage.setItem('username', username);
+                        localStorage.setItem('password', password);
+                        if (response.response.showEmailPhoneScreen) {
+                            history.push("/userInformation", { id: response.response.id });
+                        } else if (response.response.showTermsAndCondition) {
+                            history.push("/termConditions", { id: response.response.id });
+                        } else if (response.response.showWelcomeScreen) {
+                            history.push("/dashboard", { id: response.response.id });
+                        }
+                    } else {
+                        setErrorMsg(response.response.errorDescription);
+                        setErrorDisplay(true);
                     }
-                } else {
-                    setErrorMsg(response.response.errorDescription);
-                    setErrorDisplay(true);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         } else {
             setErrorMsg('Please enter both username and password');
             setErrorDisplay(true);
@@ -99,6 +106,11 @@ export default function Login() {
         <React.Fragment>
             <div className="container login-page">
                 <h2>Login</h2>
+
+                <div className={classes.svgBox}>
+                    <LoginLogo width='50%' height='50px' />
+                </div>
+
                 <TextField
                     variant="filled"
                     className={classes.inputRoot}
@@ -120,11 +132,11 @@ export default function Login() {
                     type="password"
                     onChange={handlePasswordChange}
                 />
-                {showError &&  <p  className={classes.errorMsg}>
+                {showError && <p className={classes.errorMsg}>
                     {errorMsg}
-                    </p>
+                </p>
                 }
-               
+
                 <Button
                     variant="contained"
                     className="primary-btn"
