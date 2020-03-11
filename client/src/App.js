@@ -5,6 +5,7 @@ import {
   Route,
 } from "react-router-dom";
 
+//Import all the screens
 import Login from './pages/Login'
 import TermConditions from './pages/TermConditions'
 import UserInformation from './pages/UserInformation'

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
+import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
+import classNames from 'classnames';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { makeStyles } from "@material-ui/core/styles";
-import classNames from 'classnames';
 import Header from '../../components/Header/Header'
 import { ReactComponent as UserLogo } from '../../assets/user.svg'
 import endpoint from '../../endpoint';
@@ -58,6 +58,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function UserInformation(props) {
 
+    /* Redirect to login page if user is not authenticated. */
+    if (!isAuthenticated) {
+        history.push("/login")
+    }
+
     const classes = useStyles();
     const history = useHistory();
     const [promoChecked, setPromoChecked] = useState(true);
@@ -68,10 +73,10 @@ export default function UserInformation(props) {
     const [showSecError, setSecErrorDisplay] = useState(false);
     const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
 
-    if (!isAuthenticated) {
-        history.push("/login")
-    }
-
+    /**
+    * Saves the email value when user focuses out of email input box.
+    * @param {Object} event Object that can be referred as event handler triggered by user action 
+    */
     const handleEmailChange = event => {
         setSecErrorDisplay(false);
         const validEmailId = validateEmail(event.target.value);
@@ -81,34 +86,57 @@ export default function UserInformation(props) {
         } else {
             setErrorDisplay(true);
         }
-
     };
 
+    /**
+    * Saves the country code value when user focuses out of country code input box.
+    * @param {Object} event Object that can be referred as event handler triggered by user action 
+    */
     const handleCountryCodeChange = event => {
         setSecErrorDisplay(false);
         setCountryCode(event.target.value);
     };
 
+    /**
+    * Saves the phone number value when user focuses out of phone number input box.
+    * @param {Object} event Object that can be referred as event handler triggered by user action 
+    */
     const handlePhoneChange = event => {
         setSecErrorDisplay(false);
         setPhoneNumber(event.target.value);
     };
 
+    /**
+    * Saves the promotion checkbox value when user clicks on checkbox.
+    * @param {Object} event Object that can be referred as event handler triggered by user action 
+    */
     const handlePromoChange = event => {
         setPromoChecked(event.target.checked);
     };
 
+    /**
+    * Checks for valid email address using regex.
+    * @param {String} email email address entered by user.
+    */
     const validateEmail = email => {
         var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         return emailRegex.test(email);
     }
 
+    /**
+    * Redirect user to welcome page.
+    * @param none
+    */
     const skipSaveInformation = () => {
-        history.push("/dashboard") 
+        history.push("/dashboard")
     }
 
+    /**
+    * Saves information typed by user otherwise show error.
+    * @param none 
+    */
     const saveUserInformation = () => {
-        if(email && countryCode && phoneNumber){
+        if (email && countryCode && phoneNumber) {
             const url = `${endpoint.BASE_URL}${endpoint.UPDATE}`;
             const payload = {
                 id: localStorage.getItem('userid'),
@@ -118,7 +146,7 @@ export default function UserInformation(props) {
                 phone: `${countryCode}-${phoneNumber}`,
                 acceptMarketing: promoChecked
             }
-    
+
             fetch(url, {
                 method: 'PUT',
                 mode: 'cors',
@@ -128,17 +156,16 @@ export default function UserInformation(props) {
                 },
                 body: JSON.stringify(payload)
             })
-                .then(resp => resp.json())
-                .then((response) => {
-                    console.error('success:', response);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+            .then(resp => resp.json())
+            .then((response) => {
+                console.error('success:', response);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         } else {
             setSecErrorDisplay(true);
         }
-        
     }
 
     return (

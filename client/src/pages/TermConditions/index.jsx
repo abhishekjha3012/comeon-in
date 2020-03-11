@@ -1,9 +1,9 @@
 import React from 'react';
+import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import Header from '../../components/Header/Header'
 import { ReactComponent as TNCLogo } from '../../assets/tnc.svg'
-import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
     tncBox: {  
@@ -28,6 +28,7 @@ export default function TermConditions() {
     const history = useHistory();
     const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
 
+    /* Redirect to login page if user is not authenticated*/
     if(!isAuthenticated){
         history.push("/login") 
     }

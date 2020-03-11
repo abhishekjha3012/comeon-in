@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from "@material-ui/core/styles";
-import { ReactComponent as LoginLogo } from '../../assets/login.svg'
-import endpoint from '../../endpoint'
-import global from '../../global.scss'
+import { ReactComponent as LoginLogo } from '../../assets/login.svg';
+import endpoint from '../../endpoint';
+import global from '../../global.scss';
 
 const useStyles = makeStyles(theme => ({
     inputRoot: {
@@ -47,16 +47,28 @@ export default function Login() {
     const [errorMsg, setErrorMsg] = useState('');
     const [showError, setErrorDisplay] = useState(false);
 
+    /**
+    * Saves the username value when user focuses out of username input box.
+    * @param {Object} event Object that can be referred as event handler triggered by user action 
+    */
     const handleUsernameChange = event => {
         setErrorDisplay(false);
         setUsername(event.target.value);
     };
 
+    /**
+    * Saves the password value when user focuses out of password input box.
+    * @param {Object} event Object that can be referred as event handler triggered by user action 
+    */
     const handlePasswordChange = event => {
         setErrorDisplay(false);
         setPassword(event.target.value);
     };
 
+    /**
+    * Triggers authentication if both username/password entered. Otherwise show error.
+    * @param none 
+    */
     const triggerLogin = () => {
         if (username && password) {
             setErrorMsg('');
@@ -76,27 +88,27 @@ export default function Login() {
                 },
                 body: JSON.stringify(payload)
             })
-                .then(resp => resp.json())
-                .then((response) => {
-                    if (response.status.toLowerCase() === 'success') {
-                        localStorage.setItem('username', username);
-                        localStorage.setItem('password', password);
-                        localStorage.setItem('userid', response.response.id );
-                        if (response.response.showEmailPhoneScreen) {
-                            history.push("/userInformation", { id: response.response.id });
-                        } else if (response.response.showTermsAndCondition) {
-                            history.push("/termConditions", { id: response.response.id });
-                        } else if (response.response.showWelcomeScreen) {
-                            history.push("/dashboard", { id: response.response.id });
-                        }
-                    } else {
-                        setErrorMsg(response.response.errorDescription);
-                        setErrorDisplay(true);
+            .then(resp => resp.json())
+            .then((response) => {
+                if (response.status.toLowerCase() === 'success') {
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('password', password);
+                    localStorage.setItem('userid', response.response.id);
+                    if (response.response.showEmailPhoneScreen) {
+                        history.push("/userInformation", { id: response.response.id });
+                    } else if (response.response.showTermsAndCondition) {
+                        history.push("/termConditions", { id: response.response.id });
+                    } else if (response.response.showWelcomeScreen) {
+                        history.push("/dashboard", { id: response.response.id });
                     }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
+                } else {
+                    setErrorMsg(response.response.errorDescription);
+                    setErrorDisplay(true);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         } else {
             setErrorMsg('Please enter both username and password');
             setErrorDisplay(true);
@@ -106,6 +118,7 @@ export default function Login() {
     return (
         <React.Fragment>
             <div className="container login-page">
+
                 <h2>Login</h2>
 
                 <div className={classes.svgBox}>
@@ -122,6 +135,7 @@ export default function Login() {
                     label="Username"
                     onBlur={handleUsernameChange}
                 />
+
                 <TextField
                     variant="filled"
                     className={classes.inputRoot}
@@ -133,7 +147,7 @@ export default function Login() {
                     type="password"
                     onBlur={handlePasswordChange}
                 />
-                
+
                 {showError && <p className={classes.errorMsg}>
                     {errorMsg}
                 </p>
@@ -147,6 +161,7 @@ export default function Login() {
                 >
                     Login
                 </Button>
+                
             </div>
         </React.Fragment>
     )

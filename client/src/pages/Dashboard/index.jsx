@@ -1,6 +1,6 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 import Header from '../../components/Header/Header'
 import { ReactComponent as WelcomeLogo } from '../../assets/welcome.svg'
 
@@ -32,6 +32,7 @@ export default function Dashboard() {
     const history = useHistory();
     const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
 
+    /* Redirect to login page is user is not authenticated*/
     if(!isAuthenticated){
         history.push("/login") 
     }

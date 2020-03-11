@@ -16,6 +16,10 @@ export default function Header() {
 	const classes = useStyles();
 	const history = useHistory();
 
+	/**
+    * Triggers logout and clears all local storage values.
+    * @param none 
+    */
 	const triggerLogout = () => {
 		localStorage.removeItem('username');
 		localStorage.removeItem('password');
@@ -25,7 +29,9 @@ export default function Header() {
 
 	return (
 		<div className={classes.header}> 
+
 			<h2>Logo</h2> 
+			
 			<div className={classes.logoutIcon} onClick={triggerLogout}>
 				<LogoutIcon width='100%' height='100%' />
 			</div>
