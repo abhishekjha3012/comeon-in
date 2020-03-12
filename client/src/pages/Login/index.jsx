@@ -43,6 +43,7 @@ export default function Login() {
     const classes = useStyles();
     const history = useHistory();
 
+    /* Redirect to dashboard page if user is already authenticated previously*/
     if(localStorage.getItem('username')){
         history.push('/dashboard');
     }
