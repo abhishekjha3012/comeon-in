@@ -26,10 +26,10 @@ const useStyles = makeStyles(theme => ({
     promotionCheck: {
         marginTop: '25px'
     },
-    inputBox: {
+    inputProps: {
         color: global.green,
     },
-    inputRoot: {
+    inputBox: {
         '& label': {
             color: global.green,
         },
@@ -45,45 +45,47 @@ const useStyles = makeStyles(theme => ({
     },
     svgBox: {
         textAlign: 'center',
-        width: '100px',
+        width: '100%',
         height: '50px',
-        margin: '0 auto'
+    },
+    errorBox: {
+        height: '20px'
     },
     errorMsg: {
         color: global.red,
-        fontSize: '12px'
     }
 
 }))
 
 export default function UserInformation(props) {
 
+    const classes = useStyles();
+    const history = useHistory();
+
     /* Redirect to login page if user is not authenticated. */
+    const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
     if (!isAuthenticated) {
         history.push("/login")
     }
 
-    const classes = useStyles();
-    const history = useHistory();
     const [promoChecked, setPromoChecked] = useState(true);
     const [email, setEmail] = useState('');
     const [countryCode, setCountryCode] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
     const [showError, setErrorDisplay] = useState(false);
-    const [showSecError, setSecErrorDisplay] = useState(false);
-    const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
 
     /**
     * Saves the email value when user focuses out of email input box.
     * @param {Object} event Object that can be referred as event handler triggered by user action 
     */
     const handleEmailChange = event => {
-        setSecErrorDisplay(false);
         const validEmailId = validateEmail(event.target.value);
         if (validEmailId) {
             setErrorDisplay(false);
             setEmail(event.target.value);
         } else {
+            setErrorMsg('Please enter valid email address.')
             setErrorDisplay(true);
         }
     };
@@ -93,7 +95,7 @@ export default function UserInformation(props) {
     * @param {Object} event Object that can be referred as event handler triggered by user action 
     */
     const handleCountryCodeChange = event => {
-        setSecErrorDisplay(false);
+        setErrorDisplay(false);
         setCountryCode(event.target.value);
     };
 
@@ -102,7 +104,7 @@ export default function UserInformation(props) {
     * @param {Object} event Object that can be referred as event handler triggered by user action 
     */
     const handlePhoneChange = event => {
-        setSecErrorDisplay(false);
+        setErrorDisplay(false);
         setPhoneNumber(event.target.value);
     };
 
@@ -156,21 +158,28 @@ export default function UserInformation(props) {
                 },
                 body: JSON.stringify(payload)
             })
-            .then(resp => resp.json())
-            .then((response) => {
-                console.error('success:', response);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                .then(resp => resp.json())
+                .then((response) => {
+                    console.error('success:', response);
+                    if (response.status.toLowerCase() === 'success'){
+                        history.push('/dashboard');
+                    } else {
+                        setErrorMsg(response.response.errorDescription)
+                        setErrorDisplay(true);;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         } else {
-            setSecErrorDisplay(true);
+            setErrorMsg('Please enter all details.')
+            setErrorDisplay(true);
         }
     }
 
     return (
         <React.Fragment>
-            <div className="container user-info-page">
+            <div className={classNames('container', classes.userInfoPage)}>
 
                 <Header />
 
@@ -178,80 +187,76 @@ export default function UserInformation(props) {
                     <UserLogo width='50%' height='50px' />
                 </div>
 
-                <h3>Share Your Details</h3>
+                <div>
 
-                <TextField
-                    fullWidth
-                    variant="filled"
-                    className={classNames(classes.emailInput, classes.inputRoot)}
-                    InputProps={{
-                        className: classes.inputBox
-                    }}
-                    label="Email"
-                    onBlur={handleEmailChange}
-                />
-
-                {showError && <p className={classes.errorMsg}>
-                    Please enter valid email address.
-                </p>
-                }
-
-                <TextField
-                    variant="filled"
-                    className={classNames(classes.countryCodeInput, classes.inputRoot)}
-                    InputProps={{
-                        className: classes.inputBox
-                    }}
-                    label="Code"
-                    onBlur={handleCountryCodeChange}
-                />
-
-                <TextField
-                    variant="filled"
-                    className={classNames(classes.phoneNoInput, classes.inputRoot)}
-                    InputProps={{
-                        className: classes.inputBox
-                    }}
-                    label="Phone Number"
-                    onBlur={handlePhoneChange}
-                />
-
-                <div className={classes.promotionCheck}>
-                    <FormGroup row>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={promoChecked}
-                                    onChange={handlePromoChange}
-                                    value="primary"
-                                    inputProps={{ 'aria-label': 'primary checkbox' }}
-                                />
-                            }
-                            label="I do not want to receive electronic marketing material"
-                        />
-                    </FormGroup>
+                    <h3>Share Your Details</h3>
+                    <TextField
+                        fullWidth
+                        variant="filled"
+                        className={classNames(classes.emailInput, classes.inputBox)}
+                        InputProps={{
+                            className: classes.inputProps
+                        }}
+                        label="Email"
+                        onBlur={handleEmailChange}
+                    />
+                    <TextField
+                        variant="filled"
+                        className={classNames(classes.countryCodeInput, classes.inputBox)}
+                        InputProps={{
+                            className: classes.inputProps
+                        }}
+                        label="Code"
+                        onBlur={handleCountryCodeChange}
+                    />
+                    <TextField
+                        variant="filled"
+                        className={classNames(classes.phoneNoInput, classes.inputBox)}
+                        InputProps={{
+                            className: classes.inputProps
+                        }}
+                        label="Phone Number"
+                        onBlur={handlePhoneChange}
+                    />
+                    <div className={classes.promotionCheck}>
+                        <FormGroup row>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={promoChecked}
+                                        onChange={handlePromoChange}
+                                        value="primary"
+                                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                                    />
+                                }
+                                label="I do not want to receive electronic marketing material"
+                            />
+                        </FormGroup>
+                    </div>
+                    <div className={classes.errorBox}>
+                        {showError && <p className={classes.errorMsg}>
+                            {errorMsg}
+                        </p>
+                        }
+                    </div>
                 </div>
 
-                {showSecError && <p className={classes.errorMsg}>
-                    Please enter all details.
-                </p>
-                }
-
-                <Button
-                    variant="contained"
-                    className="primary-btn"
-                    onClick={skipSaveInformation}
-                >
-                    Skip
-                </Button>
-
-                <Button
-                    variant="contained"
-                    className="primary-btn"
-                    onClick={saveUserInformation}
-                >
-                    Update
-                </Button>
+                <div>
+                    <Button
+                        variant="contained"
+                        className="primary-btn"
+                        onClick={skipSaveInformation}
+                    >
+                        Skip
+                    </Button>
+                    <Button
+                        variant="contained"
+                        className="primary-btn"
+                        onClick={saveUserInformation}
+                    >
+                        Update
+                    </Button>
+                </div>
 
             </div>
         </React.Fragment>

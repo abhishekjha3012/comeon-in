@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
+import classNames from 'classnames';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { ReactComponent as LoginLogo } from '../../assets/login.svg';
@@ -8,7 +9,7 @@ import endpoint from '../../endpoint';
 import global from '../../global.scss';
 
 const useStyles = makeStyles(theme => ({
-    inputRoot: {
+    inputBox: {
         margin: '10px 0',
         '& label': {
             color: global.green,
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
             borderBottomColor: global.green,
         }
     },
-    input: {
+    inputProps: {
         color: global.green,
     },
     svgBox: {
@@ -34,7 +35,6 @@ const useStyles = makeStyles(theme => ({
     },
     errorMsg: {
         color: global.red,
-        fontSize: '12px'
     }
 }));
 
@@ -42,6 +42,11 @@ export default function Login() {
 
     const classes = useStyles();
     const history = useHistory();
+
+    if(localStorage.getItem('username')){
+        history.push('/dashboard');
+    }
+    
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
@@ -88,36 +93,36 @@ export default function Login() {
                 },
                 body: JSON.stringify(payload)
             })
-            .then(resp => resp.json())
-            .then((response) => {
-                if (response.status.toLowerCase() === 'success') {
-                    localStorage.setItem('username', username);
-                    localStorage.setItem('password', password);
-                    localStorage.setItem('userid', response.response.id);
-                    if (response.response.showEmailPhoneScreen) {
-                        history.push("/userInformation", { id: response.response.id });
-                    } else if (response.response.showTermsAndCondition) {
-                        history.push("/termConditions", { id: response.response.id });
-                    } else if (response.response.showWelcomeScreen) {
-                        history.push("/dashboard", { id: response.response.id });
+                .then(resp => resp.json())
+                .then((response) => {
+                    if (response.status.toLowerCase() === 'success') {
+                        localStorage.setItem('username', username);
+                        localStorage.setItem('password', password);
+                        localStorage.setItem('userid', response.response.id);
+                        if (response.response.showEmailPhoneScreen) {
+                            history.push("/userInformation", { id: response.response.id });
+                        } else if (response.response.showTermsAndCondition) {
+                            history.push("/termConditions", { id: response.response.id });
+                        } else if (response.response.showWelcomeScreen) {
+                            history.push("/dashboard", { id: response.response.id });
+                        }
+                    } else {
+                        setErrorMsg(response.response.errorDescription);
+                        setErrorDisplay(true);
                     }
-                } else {
-                    setErrorMsg(response.response.errorDescription);
-                    setErrorDisplay(true);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         } else {
-            setErrorMsg('Please enter both username and password');
+            setErrorMsg('Please enter valid username and password');
             setErrorDisplay(true);
         }
     }
 
     return (
         <React.Fragment>
-            <div className="container login-page">
+            <div className={classNames('container', classes.loginPage)}>
 
                 <h2>Login</h2>
 
@@ -125,33 +130,36 @@ export default function Login() {
                     <LoginLogo width='50%' height='50px' />
                 </div>
 
-                <TextField
-                    variant="filled"
-                    className={classes.inputRoot}
-                    fullWidth
-                    InputProps={{
-                        className: classes.input
-                    }}
-                    label="Username"
-                    onBlur={handleUsernameChange}
-                />
+                <div>
 
-                <TextField
-                    variant="filled"
-                    className={classes.inputRoot}
-                    fullWidth
-                    InputProps={{
-                        className: classes.input
-                    }}
-                    label="Password"
-                    type="password"
-                    onBlur={handlePasswordChange}
-                />
+                    <TextField
+                        variant="filled"
+                        className={classes.inputBox}
+                        fullWidth
+                        InputProps={{
+                            className: classes.inputProps
+                        }}
+                        label="Username"
+                        onBlur={handleUsernameChange}
+                    />
 
-                {showError && <p className={classes.errorMsg}>
-                    {errorMsg}
-                </p>
-                }
+                    <TextField
+                        variant="filled"
+                        className={classes.inputBox}
+                        fullWidth
+                        InputProps={{
+                            className: classes.inputProps
+                        }}
+                        label="Password"
+                        type="password"
+                        onBlur={handlePasswordChange}
+                    />
+
+                    {showError && <p className={classes.errorMsg}>
+                        {errorMsg}
+                    </p>
+                    }
+                </div>
 
                 <Button
                     variant="contained"
@@ -161,7 +169,7 @@ export default function Login() {
                 >
                     Login
                 </Button>
-                
+
             </div>
         </React.Fragment>
     )

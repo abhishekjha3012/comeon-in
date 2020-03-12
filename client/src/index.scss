@@ -16,11 +16,14 @@ h2,h3,h4 {
   width: calc(100% - 40px);
   max-width: 400px;
   margin: 0 auto;
+  display: grid;
+  grid-template-rows: 70px auto 1fr auto;
+  grid-gap: 20px;
 
   .primary-btn {
     width: 100%;
-    margin-top: 25px;
     color: white;
+    margin-bottom: 20px;
     background-color: rgb(142, 181, 13);
   }
 }

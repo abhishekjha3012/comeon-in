@@ -1,21 +1,20 @@
 import React from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
+import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
-import Header from '../../components/Header/Header'
-import { ReactComponent as TNCLogo } from '../../assets/tnc.svg'
+import Header from '../../components/Header/Header';
+import { ReactComponent as TNCLogo } from '../../assets/tnc.svg';
 
 const useStyles = makeStyles(theme => ({
-    tncBox: {  
-        maxHeight: '25vh',
+    tncContentBox: {  
         overflow: 'scroll',
         padding: '10px 20px',
         border: '1px solid white'
     },
     svgBox: {
         textAlign: 'center',
-        width: '100px',
-        margin: '0 auto'
+        width: '100%',
     },
     tncHeader: {
         textAlign: 'left',
@@ -26,16 +25,24 @@ export default function TermConditions() {
     
     const classes = useStyles();
     const history = useHistory();
-    const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
 
     /* Redirect to login page if user is not authenticated*/
+    const isAuthenticated = localStorage.getItem('username') && localStorage.getItem('password');
     if(!isAuthenticated){
         history.push("/login") 
     }
 
+    /**
+    * Redirect user to welcome page.
+    * @param none
+    */
+    const triggerNavigation = () => {
+        history.push("/dashboard")
+    }
+
     return (
         <React.Fragment>
-            <div className="container term-conditions-page">
+            <div className={classNames('container', classes.tncPage )}>
 
                 <Header/>
 
@@ -43,15 +50,14 @@ export default function TermConditions() {
                     <TNCLogo width='50%' height='50px' />
                 </div>
 
-                <h3>Terms and Conditions</h3>
+                <div>
+                    <h3>Terms and Conditions</h3>
+                    <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...</p>
+                    <p>Version: 25-04</p>
+                    <p>Senaste Update: 2014-05-06</p>
+                </div>
 
-                <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...</p>
-
-                <p>Version: 25-04</p>
-
-                <p>Senaste Update: 2014-05-06</p>
-
-                <div className={classes.tncBox}>
+                <div className={classes.tncContentBox}>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis sapien elit. Vestibulum porta sed
                     enim eu lobortis. Nulla facilisi. Donec dictum nibh eu nisl efficitur posuere. Duis sit amet rhoncus
                     ex. Vivamus eu lectus metus. Duis id blandit enim, ut luctus lacus. In in elementum augue.</p>
@@ -80,6 +86,7 @@ export default function TermConditions() {
                 <Button
                     variant="contained"
                     className="primary-btn"
+                    onClick={triggerNavigation}
                 >
                     Accept
                 </Button>
